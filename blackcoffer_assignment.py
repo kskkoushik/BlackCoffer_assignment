@@ -4927,6 +4927,9 @@ import nltk
 import syllables #syllables library is used to count number of syllables in a word
 import spacy
 nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
+from nltk.tokenize import word_tokenize
+from nltk.tag import pos_tag
 
 def posnegtivity(string):
 
@@ -4979,13 +4982,20 @@ def posnegtivity(string):
 
 def number_of_personal_pronouns(string):
 
-    nlp = spacy.load("en_core_web_sm")
+    # Tokenize the sentence into words
+    words = word_tokenize(sentence)
+    
+    # Use part-of-speech tagging to identify pronouns
+    pos_tags = pos_tag(words)
+    
+    # Define personal pronoun tags
+    personal_pronoun_tags = ['PRP', 'PRP$', 'WP', 'WP$']
+    
+    # Count the number of personal pronouns
+    count = sum(1 for word, pos_tag in pos_tags if pos_tag in personal_pronoun_tags)
+    
+    return count
 
-    doc = nlp(string) # parsing the string to spacy structured docs
-
-    personal_pronouns = [token for token in doc if token.pos in ['PRP' , 'PRP$']] #counting number of pronouns in the string
-
-    return len(personal_pronouns)
 
 
 
